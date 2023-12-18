@@ -1,0 +1,127 @@
+// DEFINE SENSORS
+int SensorL = 0;
+int SensorR = 0;
+int SensorM = 0;
+int readingL;
+int readingM;
+int readingR;
+int threshold = 100; //range of 0-1023 / higher value = brighter
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(5,OUTPUT);
+  pinMode(6,OUTPUT);
+  pinMode(7,OUTPUT);
+  pinMode(8,OUTPUT);
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  pinMode(A2, INPUT);
+}
+
+void loop() {
+   readingL=analogRead(A2);
+   readingM=analogRead(A1);
+   readingR=analogRead(A0);
+  //Serial.println(readingL);
+  // Serial.println(readingR);
+  // Serial.println(readingM);
+  control();
+}
+
+
+void forward(){
+  analogWrite(3,160);
+  digitalWrite(5,HIGH);
+  digitalWrite(6,HIGH);
+  digitalWrite(7,HIGH);
+  digitalWrite(8,HIGH);
+  //Serial.print("forwards");
+}
+
+ void left(){
+   analogWrite(3,120);
+   digitalWrite(5,HIGH);
+   digitalWrite(6,LOW);
+   digitalWrite(7,HIGH);
+   digitalWrite(8,LOW);
+   //Serial.print("left");
+ }
+
+void hardleft(){
+  analogWrite(3,120); 
+  digitalWrite(5,HIGH);
+  digitalWrite(6,LOW);
+  digitalWrite(7,HIGH);
+  digitalWrite(8,LOW);
+  //Serial.print("hardleft");
+  //delay(10);
+}
+void right(){
+  analogWrite(3,120);
+  digitalWrite(5,LOW); 
+  digitalWrite(6,HIGH);
+  digitalWrite(7,LOW);
+  digitalWrite(8,HIGH);
+  //Serial.print("right");
+}
+
+
+void hardright(){
+  analogWrite(3,120);
+  digitalWrite(5,LOW); 
+  digitalWrite(6,HIGH);
+  digitalWrite(7,LOW);
+  digitalWrite(8,HIGH);
+  //Serial.print("hardright");
+  //delay(10);
+}
+// void reverse(){
+//   analogWrite(3,60);
+//   digitalWrite(5,HIGH); 
+//   digitalWrite(6,HIGH);
+//   digitalWrite(7,LOW);
+//   digitalWrite(8,LOW);
+// }
+
+
+void control(){
+    readingL = analogRead(A2);
+    readingR = analogRead(A1);
+    readingM = analogRead(A0);
+    
+    // FORWARD  
+    if (readingR > threshold && readingL > threshold && readingM < threshold){ //W B W
+    // if (readingM < threshold){
+        forward();
+        // Serial.print("forwards\n");
+    }
+    {delay(0);
+}
+
+    // LEFT
+    if (readingL > threshold && readingR < threshold && readingM > threshold){ // W B
+        left();
+        // Serial.print("left\n");
+    }
+    //HARDLEFT
+    if (readingL > threshold && readingR < threshold && readingM < threshold){ // W B
+        hardleft();
+        // Serial.print("hardleft\n");
+    }
+
+    // RIGHT
+    if (readingR > threshold && readingL < threshold && readingM > threshold){ // B W
+        right();
+        // Serial.print("right\n");
+    }
+
+    // HARDRIGHT
+    if (readingR > threshold && readingL < threshold && readingM < threshold){ // B W
+        hardright();
+        // Serial.print("hardright\n");
+    }
+
+    // if (readingR < threshold && readingL < threshold && readingM < threshold){
+    //   reverse();
+    // }
+}
